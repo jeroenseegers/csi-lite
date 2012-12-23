@@ -7,7 +7,7 @@
             <td width="12" height="12"></td>
         </tr>
         </table>
-        
+
         <?php
              if (isset($installresult) || (!empty($screenshots)))
              {

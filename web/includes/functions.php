@@ -6,46 +6,46 @@ function CleanTemp()
     exec("mkdir -p \"".$GLOBALS['TEMPDIR']."\"");
 }
 
-function recurse_copy($src,$dst) { 
+function recurse_copy($src,$dst) {
     $dir = opendir($src);
     if (!file_exists($dst))
     {
         mkdir($dst);
     }
-    
-    while(false !== ( $file = readdir($dir)) ) { 
-        if (( $file != '.' ) && ( $file != '..' )) { 
-            if ( is_dir($src . $file) ) { 
-                recurse_copy($src . $file."/",$dst . $file."/"); 
-            } 
-            else { 
+
+    while(false !== ( $file = readdir($dir)) ) {
+        if (( $file != '.' ) && ( $file != '..' )) {
+            if ( is_dir($src . $file) ) {
+                recurse_copy($src . $file."/",$dst . $file."/");
+            }
+            else {
                  #if (file_exists($dst . $file)) {
                  #   unlink($dst . $file);
                  #}
-                
+
                 copy($src . $file,$dst . $file);
                 exec("\"".$GLOBALS['MAINDIR']."bin/busybox\" chmod 777 \"".$dst . $file."\"");
-            } 
-        } 
-    } 
+            }
+        }
+    }
     closedir($dir);
 }
 
 function Cleanup($src)
 {
     $dir = opendir($src);
-    
-    while(false !== ( $file = readdir($dir)) ) { 
-        if (( $file != '.' ) && ( $file != '..' )) { 
-            if ( is_dir($src . $file) ) { 
-                Cleanup($src . $file,$dst . $file); 
-            } 
+
+    while(false !== ( $file = readdir($dir)) ) {
+        if (( $file != '.' ) && ( $file != '..' )) {
+            if ( is_dir($src . $file) ) {
+                Cleanup($src . $file,$dst . $file);
+            }
             else {
                 unlink("/share/". substr($src,strlen($GLOBALS['TEMPDIR'])) . $file);
-            } 
-        } 
-    } 
-    closedir($dir); 
+            }
+        }
+    }
+    closedir($dir);
 }
 
 function DownloadFile($url, $clean)
@@ -54,28 +54,28 @@ function DownloadFile($url, $clean)
     {
         CleanTemp();
     }
-    
+
     $handle = fopen($url, "r");
-    
+
     $filename=substr($url, strrpos($url,'/')+1);
     $write = fopen($GLOBALS['TEMPDIR'].$filename, "w+");
-    
+
     if ($handle && $write)
-    { 
+    {
         while (!feof($handle))
-        { 
+        {
             $buffer = fread($handle, 4096);
             fwrite($write, $buffer);
-        } 
+        }
         fclose($handle);
         fclose($write);
     }
-    
+
     if (substr($filename,strrpos($filename,'.')+1)=="zip")
     {
         UnZip($filename);
     }
-    
+
     exec("chmod -R 777 \"".$GLOBALS['TEMPDIR']."\"");
 }
 
@@ -94,16 +94,16 @@ function InstallApplication($selecteditem)
     DownloadFile($GLOBALS['APPINIT_URL'], false);
     DownloadFile($GLOBALS['INSTALLPREPARE_URL'], false);
     recurse_copy($GLOBALS['TEMPDIR'],"/share/");
-    
-    
+
+
     #install appinit
     file("http://localhost.drives:8883/".$GLOBALS['DRIVE']."/appinit.cgi");
-    
-    
+
+
     #install prepare
     file("http://localhost.drives:8883/".$GLOBALS['DRIVE']."/installprepare.cgi");
 
-    
+
     #install application
     $output="";
     $handle=fopen("http://localhost.drives:8883/".$GLOBALS['DRIVE']."/".$selecteditem['InstallScript'],"r");
@@ -111,10 +111,10 @@ function InstallApplication($selecteditem)
           $output.=fread($handle, 4096);
     }
     fclose($handle);
-    
+
     Cleanup($GLOBALS['TEMPDIR']);
     CleanTemp();
-    
+
     $instructions="";
     if (!empty($selecteditem['WebInterfaceURL']))
     {
@@ -128,7 +128,7 @@ function InstallApplication($selecteditem)
     {
         $instructions.="Additional usage instructions: ".$selecteditem['UsageInstructions']."\n";
     }
-    
+
     return $instructions."\n".$output;
 }
 
@@ -136,7 +136,7 @@ function InstallCustomMenu($downloadurl)
 {
     DownloadFile($downloadurl, true);
     UninstallCustomMenu();
-    
+
     recurse_copy($GLOBALS['TEMPDIR'],"/share/");
     CleanTemp();
     return "Done, please use the Select Source button on your remote control\nthen select HARD_DISK.";
@@ -156,7 +156,7 @@ function InstallTheme($downloadurl)
     {
         recurse_copy($GLOBALS['TEMPDIR'],"/share/Photo/_theme_/");
     }
-    
+
     CleanTemp();
     return "Done, please restart the NMT.";
 }
@@ -175,15 +175,15 @@ function InstallWaitImageSet($downloadurl)
     {
         recurse_copy($GLOBALS['TEMPDIR'],"/share/Photo/_waitimages_/");
     }
-    
+
     DownloadFile($GLOBALS['INSTALLPREPARE_URL'], false);
     copy($GLOBALS['TEMPDIR']."installprepare.cgi", "/share/installprepare.cgi");
     exec("chmod 777 /share/installprepare.cgi");
-    
+
     $script="installprepare.cgi";
     file("http://localhost.drives:8883/".$GLOBALS['DRIVE']."/".$script);
     unlink("/share/installprepare.cgi");
-    
+
     CleanTemp();
     return "Done, please restart the NMT.";
 }
@@ -192,12 +192,12 @@ function InstallWebservice($name, $url)
 {
     DownloadFile($GLOBALS['INSTALLPREPARE_URL'], true);
     recurse_copy($GLOBALS['TEMPDIR'],"/share/");
-    
+
     $script="installprepare.cgi?webservice_name=".rawurlencode($name)."&webservice_url=".rawurlencode($url);
     file("http://localhost.drives:8883/".$GLOBALS['DRIVE']."/".$script);
-    
+
     unlink("/share/installprepare.cgi");
-    
+
     CleanTemp();
     return ("Done, webservice should be visible in Webservices menu on the NMT");
 }

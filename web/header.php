@@ -17,18 +17,18 @@
             <td width="20">&nbsp; </td>
             <td><h2><br>NMT Community Software Installer Gaya</h2>
             <form name="SelectCategory" method="post" action="index.php">
-                <input type="submit" name="toscreen" value="Apps">
-                <?php if (count($updates)>0) { ?> <input type="submit" name="toscreen" value="Updates"> <?php } ?>
-                <input type="submit" name="toscreen" value="Themes">
-                <input type="submit" name="toscreen" value="Menus">
-                <input type="submit" name="toscreen" value="Wait Images">
-                <input type="submit" name="toscreen" value="Webservices">
-                <input type="submit" name="toscreen" value="Installed">
+                <input type="submit" name="toscreen" value="apps">
+                <?php if (count($updates)>0) { ?> <input type="submit" name="toscreen" value="updates"> <?php } ?>
+                <input type="submit" name="toscreen" value="themes">
+                <input type="submit" name="toscreen" value="menus">
+                <input type="submit" name="toscreen" value="wait_images">
+                <input type="submit" name="toscreen" value="webservices">
+                <input type="submit" name="toscreen" value="installed">
             </form>
             </td>
         </tr>
     </table>
-    
+
     <table width="720"><tr><td>
     <table border="0" cellpadding="0" cellspacing="0" width=100%>
         <tr>

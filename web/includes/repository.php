@@ -11,7 +11,7 @@ function GetRepository($url, $repository)
         $content = file_get_contents($url);
         $_SESSION[sha1($url)]=$content;
     }
-    
+
     $doc = simplexml_load_string($content);
     array_push($repository, $doc);
 
@@ -19,7 +19,7 @@ function GetRepository($url, $repository)
     {
         $repository = GetRepository($o->URL, $repository);
     }
-    
+
     return $repository;
 }
 
@@ -60,7 +60,7 @@ function GetWaitImageSets($docArray)
             $results[(string)$o->Name." ".(string)$o->Version]=(array)$o;
         }
     }
-    
+
     uksort($results, 'strcasecmp');
     return $results;
 }
@@ -74,7 +74,7 @@ function GetCustomMenus($docArray)
             $results[(string)$o->Name." ".(string)$o->Version]=(array)$o;
         }
     }
-    
+
     uksort($results, 'strcasecmp');
     return $results;
 }
@@ -104,7 +104,7 @@ function GetApplicationUpdates($docArray)
         $updates=array();
         $applications=GetApplications($docArray);
         $installedapplications=GetInstalledApplications();
-        
+
         foreach($applications as $app)
         {
             foreach($installedapplications as $installed)
@@ -115,7 +115,7 @@ function GetApplicationUpdates($docArray)
                 }
             }
         }
-        
+
         $_SESSION["appupdates"] = $updates;
         return $updates;
     }
@@ -124,26 +124,26 @@ function GetApplicationUpdates($docArray)
 function GetInstalledApplications()
 {
     exec("/share/Apps/AppInit/appinit.cgi info", $outputArray);
-    
+
     $output="";
     foreach($outputArray as $item) {
         $item=preg_replace('/(\s+)\"?([^\",]+)\"?\s*[=:]\s*(.*)\s*/','$1"$2":$3',$item);
         $item=preg_replace('/(.*)[=:]\"?([^\",}]+)\"?([^\"]*)/','$1:"$2"$3',$item);
         $output.=$item;
     }
-    
+
     $output=substr($output, strpos($output,'{'),(strrpos($output,'}')+1)-strpos($output,'{'));
-        
+
     $found = true;
     while ($found) {
         $found=false;
         $section=substr($output, strpos($output,'{'),(strpos($output,'}')+1)-strpos($output,'{'));
         $output=substr($output,strpos($output,'}')+1);
-        
+
         if (strlen($section)>0) {
             $found=true;
             $json=json_decode( $section, true );
-                        
+
             $item = array();
             $item['Name']=$json['name'];
             $item['Version']=$json['version'];
@@ -153,7 +153,7 @@ function GetInstalledApplications()
             $results[$item['Name']]=$item;
         }
     }
-    
+
     uksort($results, 'strcasecmp');
     return $results;
 }

@@ -14,7 +14,7 @@
     {
         $GLOBALS['DRIVE']="SATA_DISK";
     }
-    
+
     if (is_dir("/nmt/apps/"))
     {
         $GLOBALS['REPOSITORY_URL']="http://repository.nmtinstaller.com/RepositoryInfo_C200.xml";
