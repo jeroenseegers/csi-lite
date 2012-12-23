@@ -1,10 +1,10 @@
             </td>
-            <td width="12" height="12" background="Images/tbl_rightside.png"></td>
+            <td width="12" height="12"></td>
         </tr>
         <tr>
-            <td width="12" height="12"><img src="Images/tbl_bottomleft.png"></td>
-            <td background="Images/tbl_bottomcenter.png"></td>
-            <td width="12" height="12"><img src="Images/tbl_bottomright.png"></td>
+            <td width="12" height="12"></td>
+            <td></td>
+            <td width="12" height="12"></td>
         </tr>
         </table>
         
@@ -15,13 +15,13 @@
                     <br>
                     <table border="0" cellpadding="0" cellspacing="0" width="100%">
                     <tr>
-                        <td width="12" height="12"><img src="Images/tbl_topleft.png" width="12" height="12"></td>
-                        <td height="12" background="Images/tbl_topcenter.png"></td>
-                        <td width="12" height="12"><img src="Images/tbl_topright.png" width="12" height="12"></td>
+                        <td width="12" height="12"></td>
+                        <td height="12"></td>
+                        <td width="12" height="12"></td>
                     </tr>
                     <tr>
-                        <td width="12" height="12" background="Images/tbl_leftside.png"></td>
-                        <td background="Images/tbl_center.png"><?php
+                        <td width="12" height="12"></td>
+                        <td><?php
                             if (isset($installresult))
                             {
                                 echo "<h3>Installation finished, install result:</h3>";
@@ -33,12 +33,12 @@
                                 echo $screenshots;
                             }
                         ?>&nbsp;</td>
-                        <td width="12" background="Images/tbl_rightside.png"></td>
+                        <td width="12"></td>
                     </tr>
                     <tr>
-                        <td width="12" height="12"><img src="Images/tbl_bottomleft.png" width="12" height="12"></td>
-                        <td height="12" background="Images/tbl_bottomcenter.png"></td>
-                        <td width="12" height="12"><img src="Images/tbl_bottomright.png" width="12" height="12"></td>
+                        <td width="12" height="12"></td>
+                        <td height="12"></td>
+                        <td width="12" height="12"></td>
                     </tr>
                     </table>
                     <?php

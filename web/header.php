@@ -13,7 +13,7 @@
 
     <table>
         <tr>
-            <td><img src="Images/LogoLarge.png"><br></td>
+            <td><img src="images/logo.png"><br></td>
             <td width="20">&nbsp; </td>
             <td><h2><br>NMT Community Software Installer Gaya</h2>
             <form name="SelectCategory" method="post" action="index.php">
@@ -32,11 +32,11 @@
     <table width="720"><tr><td>
     <table border="0" cellpadding="0" cellspacing="0" width=100%>
         <tr>
-            <td width="12" height="12"><img src="Images/tbl_topleft.png" width="12" height="12"></td>
-            <td height="12" background="Images/tbl_topcenter.png"></td>
-            <td width="12" height="12"><img src="Images/tbl_topright.png" width="12" height="12"></td>
+            <td width="12" height="12"></td>
+            <td height="12"></td>
+            <td width="12" height="12"></td>
         </tr>
         <tr>
-            <td width="12" height="12" background="Images/tbl_leftside.png"></td>
-            <td background="Images/tbl_center.png">
+            <td width="12" height="12"></td>
+            <td>
                 <br>
