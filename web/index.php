@@ -1,7 +1,7 @@
 <?php
-    include_once "Includes/repository.php";
-    include_once "Includes/settings.php";
-    include_once "Includes/functions.php";
+    include_once "includes/repository.php";
+    include_once "includes/settings.php";
+    include_once "includes/functions.php";
     
     
     header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
@@ -274,28 +274,28 @@
     include "header.php";
     switch ($screen) {
         case 'Updates':
-            include "Templates/Updates.php";
+            include "templates/updates.php";
             break;
         case 'Apps':
-            include "Templates/Applications.php";
+            include "templates/applications.php";
             break;
         case 'Installed':
-            include "Templates/Installed.php";
+            include "templates/installed.php";
             break;
         case 'Themes':
-            include "Templates/Themes.php";
+            include "templates/themes.php";
             break;
         case 'Wait Images':
-            include "Templates/WaitImages.php";
+            include "templates/waitimages.php";
             break;
         case 'Menus':
-            include "Templates/CustomMenus.php";
+            include "templates/custommenus.php";
             break;
         case 'Webservices':
-            include "Templates/Webservices.php";
+            include "templates/webservices.php";
             break;
         default:
-            include "Templates/Applications.php";
+            include "templates/applications.php";
     }
     include "footer.php";
 ?>
