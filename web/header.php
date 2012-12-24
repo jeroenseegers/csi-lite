@@ -18,7 +18,9 @@
             <td><h2><br>NMT Community Software Installer Gaya</h2>
             <form name="SelectCategory" method="post" action="index.php">
                 <input type="submit" name="toscreen" value="apps">
-                <?php if (count($updates)>0) { ?> <input type="submit" name="toscreen" value="updates"> <?php } ?>
+                <?php if (count($aUpdates) > 0) { ?>
+                <input type="submit" name="toscreen" value="updates">
+                <?php } ?>
                 <input type="submit" name="toscreen" value="themes">
                 <input type="submit" name="toscreen" value="menus">
                 <input type="submit" name="toscreen" value="wait_images">

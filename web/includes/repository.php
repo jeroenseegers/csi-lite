@@ -1,161 +1,151 @@
 <?php
 
-function GetRepository($url, $repository)
-{
-    if (isset($_SESSION[sha1($url)]))
-    {
-        $content = $_SESSION[sha1($url)];
-    }
-    else
-    {
-        $content = file_get_contents($url);
-        $_SESSION[sha1($url)]=$content;
-    }
+/**
+ * Get all available repository information
+ *
+ * @access  public
+ * @param   $url          string  Contains a URL to read
+ * @param   $repository   array   Contains the collection of repositories
+ * @return  array
+ */
+function get_repository($sUrl, $aRepositories) {
 
-    $doc = simplexml_load_string($content);
-    array_push($repository, $doc);
-
-    foreach($doc->DistributedRepositories->Repository as $o)
-    {
-        $repository = GetRepository($o->URL, $repository);
-    }
-
-    return $repository;
-}
-
-
-function GetApplications($docArray)
-{
-    foreach($docArray as $doc)
-    {
-        foreach($doc->Applications->Application as $o)
-        {
-            $results[(string)$o->Name." ".(string)$o->Version]=(array)$o;
+    if (substr($sUrl, -3) == 'xml') {
+        // Check if we have the repository in "cache"
+        if (!isset($_SESSION[sha1($sUrl)])) {
+            $_SESSION[sha1($sUrl)] = file_get_contents($sUrl);
         }
-    }
-    uksort($results, 'strcasecmp');
-    return $results;
-}
 
-function GetThemes($docArray)
-{
-    foreach($docArray as $doc)
-    {
-        foreach($doc->Themes->Theme as $o)
-        {
-            $results[(string)$o->Name." ".(string)$o->Version]=(array)$o;
+        $sContent = $_SESSION[sha1($sUrl)];
+
+        $oXml = simplexml_load_string($sContent);
+        array_push($aRepositories, $oXml);
+
+        if (is_object($oXml->DistributedRepositories->Repository)) {
+            foreach($oXml->DistributedRepositories->Repository as $repository) {
+                $aRepositories = get_repository($repository->URL, $aRepositories);
+            }
         }
     }
 
-    uksort($results, 'strcasecmp');
-    return $results;
+    return $aRepositories;
 }
 
-function GetWaitImageSets($docArray)
-{
-    foreach($docArray as $doc)
-    {
-        foreach($doc->WaitImageSets->WaitImageSet as $o)
-        {
-            $results[(string)$o->Name." ".(string)$o->Version]=(array)$o;
+/**
+ * Get all available information of the given category
+ *
+ * @access  public
+ * @param   $aInformation   array   Contains a collection of information for $sType
+ * @param   $sType          string  Contains the type of information to process
+ * @return  array
+ */
+function get_category($aInformation, $sType) {
+    switch ($sType) {
+        case 'applications':
+            $sParent    = 'Applications';
+            $sContainer = 'Application';
+            break;
+
+        case 'themes':
+            $sParent    = 'Themes';
+            $sContainer = 'Theme';
+            break;
+
+        case 'waitimagesets':
+            $sParent    = 'WaitImageSets';
+            $sContainer = 'WaitImageSet';
+            break;
+
+        case 'custommenus':
+            $sParent    = 'Indexes';
+            $sContainer = 'Index';
+            break;
+
+        case 'webservices':
+            $sParent    = 'Webservices';
+            $sContainer = 'Webservice';
+            break;
+    }
+
+    foreach($aInformation as $oEntry) {
+        if (is_object($oEntry->$sParent->$sContainer)) {
+            foreach($oEntry->$sParent->$sContainer as $oData) {
+                $sDescription = $oData->Name.' '.$oData->Version;
+                $aResults[$sDescription] = $oData;
+            }
         }
     }
 
-    uksort($results, 'strcasecmp');
-    return $results;
+    uksort($aResults, 'strcasecmp');
+    return $aResults;
 }
 
-function GetCustomMenus($docArray)
-{
-    foreach($docArray as $doc)
-    {
-        foreach($doc->Indexes->Index as $o)
-        {
-            $results[(string)$o->Name." ".(string)$o->Version]=(array)$o;
-        }
-    }
+/**
+ * Get application update information
+ *
+ * @access  public
+ * @param   array   $aInformation   Contains application information
+ * @return  array
+ */
+function get_application_updates($aInformation) {
+    if (!isset($_SESSION['appupdates'])) {
+        $aUpdates               = array();
+        $aApplications          = get_category($aInformation, 'applications');
+        $aInstalledApplications = get_installed_applications();
 
-    uksort($results, 'strcasecmp');
-    return $results;
-}
-
-function GetWebservices($docArray)
-{
-    foreach($docArray as $doc)
-    {
-        foreach($doc->Webservices->Webservice as $o)
-        {
-            $results[(string)$o->Name." ".(string)$o->Version]=(array)$o;
-        }
-    }
-
-    uksort($results, 'strcasecmp');
-    return $results;
-}
-
-function GetApplicationUpdates($docArray)
-{
-    if (isset($_SESSION["appupdates"]))
-    {
-        return $_SESSION["appupdates"];
-    }
-    else
-    {
-        $updates=array();
-        $applications=GetApplications($docArray);
-        $installedapplications=GetInstalledApplications();
-
-        foreach($applications as $app)
-        {
-            foreach($installedapplications as $installed)
-            {
-                if (($installed['Name']==$app['Name']) && (version_compare($app['Version'],$installed['Version'])>0))
-                {
-                    array_push($updates,$app);
+        foreach($aApplications as $aApplication) {
+            foreach($aInstalledApplications as $aInstalled) {
+                if (($aInstalled['Name'] == $aApplication['Name']) && (version_compare($aApplication['Version'], $aInstalled['Version']) > 0)) {
+                    array_push($aUpdates, $aApplication);
                 }
             }
         }
 
-        $_SESSION["appupdates"] = $updates;
-        return $updates;
+        $_SESSION['appupdates'] = $aUpdates;
     }
+
+    return $_SESSION['appupdates'];
 }
 
-function GetInstalledApplications()
-{
-    exec("/share/Apps/AppInit/appinit.cgi info", $outputArray);
+/**
+ * Get a list of installed applications
+ *
+ * @access public
+ * @return array
+ */
+function get_installed_applications() {
+    $aResults = array();
 
-    $output="";
-    foreach($outputArray as $item) {
-        $item=preg_replace('/(\s+)\"?([^\",]+)\"?\s*[=:]\s*(.*)\s*/','$1"$2":$3',$item);
-        $item=preg_replace('/(.*)[=:]\"?([^\",}]+)\"?([^\"]*)/','$1:"$2"$3',$item);
-        $output.=$item;
+    exec("/share/Apps/AppInit/appinit.cgi info", $aInfo);
+
+    $sOutput = '';
+    foreach($aInfo as $sItem) {
+        $sItem       = preg_replace('/(\s+)\"?([^\",]+)\"?\s*[=:]\s*(.*)\s*/', '$1"$2":$3', $sItem);
+        $sItem       = preg_replace('/(.*)[=:]\"?([^\",}]+)\"?([^\"]*)/', '$1:"$2"$3', $sItem);
+        $sOutput    .= $sItem;
     }
+    $sOutput = substr($sOutput, strpos($sOutput, '{'), (strrpos($sOutput, '}') + 1) - strpos($sOutput, '{'));
 
-    $output=substr($output, strpos($output,'{'),(strrpos($output,'}')+1)-strpos($output,'{'));
+    $bFound = TRUE;
+    while ($bFound) {
+        $bFound     = FALSE;
+        $sSection   = substr($sOutput, strpos($sOutput, '{'), (strpos($sOutput, '}') + 1) - strpos($sOutput, '{'));
+        $sOutput    = substr($sOutput, strpos($sOutput, '}') + 1);
 
-    $found = true;
-    while ($found) {
-        $found=false;
-        $section=substr($output, strpos($output,'{'),(strpos($output,'}')+1)-strpos($output,'{'));
-        $output=substr($output,strpos($output,'}')+1);
+        if (strlen($sSection) > 0) {
+            $bFound  = TRUE;
+            $sJson   = json_decode($sSection, true);
 
-        if (strlen($section)>0) {
-            $found=true;
-            $json=json_decode( $section, true );
+            $aItem              = array();
+            $aItem['Name']      = $sJson['name'];
+            $aItem['Version']   = $sJson['version'];
+            $aItem['Enabled']   = $sJson['enabled'];
+            $aItem['Started']   = $sJson['started'];
 
-            $item = array();
-            $item['Name']=$json['name'];
-            $item['Version']=$json['version'];
-            $item['Enabled']=$json['enabled'];
-            $item['Started']=$json['started'];
-
-            $results[$item['Name']]=$item;
+            $aResults[$aItem['Name']] = $aItem;
         }
     }
 
-    uksort($results, 'strcasecmp');
-    return $results;
+    uksort($aResults, 'strcasecmp');
+    return $aResults;
 }
-
-?>
