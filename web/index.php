@@ -189,7 +189,7 @@ switch($sScreen) {
         break;
 }
 
-#Find currently selected Item
+// Find currently selected item
 foreach($aList as $oInfo) {
     if (!isset($sSelectedName)) {
         $sSelectedName = $oInfo->Name.' '.$oInfo->Version;
@@ -204,7 +204,7 @@ foreach($aList as $oInfo) {
 }
 
 #------------------------- COMPILE OUTPUT -------------------------
-#options
+// Options
 $sOptions = '';
 foreach($aList as $oInfo) {
     if ($sSelectedName == $oInfo->Name.' '.$oInfo->Version) {
@@ -215,17 +215,19 @@ foreach($aList as $oInfo) {
     }
 }
 
-#Screenshots
+// Screenshots
 $sScreenshots = '';
 if (isset($oSelectedItem) && is_object($oSelectedItem)) {
-    $oScreenshots = $oSelectedItem->Screenshots;
-    if (is_string($oScreenshots->URL)) {
-        $sScreenshots .= '<a href="screenshot.php?ScreenshotURL='.$oScreenshots->URL.'"><img width="100" src="'.$oScreenshots->URL.'" border="0"></a>&nbsp;&nbsp;';
-    }
-    else {
-        foreach($oScreenshots as $oScreenshot) {
-            foreach($oScreenshot as $sUrl) {
-                $sScreenshots .= '<a href="screenshot.php?ScreenshotURL='.$sUrl.'"><img width="100" src="'.$sUrl.'" border="0"></a>&nbsp;&nbsp;';
+    if (isset($oSelectedItem->Screenshots)) {
+        $oScreenshots = $oSelectedItem->Screenshots;
+        if (is_string($oScreenshots->URL)) {
+            $sScreenshots .= '<a href="screenshot.php?ScreenshotURL='.$oScreenshots->URL.'"><img width="100" src="'.$oScreenshots->URL.'" border="0"></a>&nbsp;&nbsp;';
+        }
+        else {
+            foreach($oScreenshots as $oScreenshot) {
+                foreach($oScreenshot as $sUrl) {
+                    $sScreenshots .= '<a href="screenshot.php?ScreenshotURL='.$sUrl.'"><img width="100" src="'.$sUrl.'" border="0"></a>&nbsp;&nbsp;';
+                }
             }
         }
     }
@@ -233,6 +235,7 @@ if (isset($oSelectedItem) && is_object($oSelectedItem)) {
     $oSelectedItem = new stdClass();
     $oSelectedItem->Name = '';
     $oSelectedItem->Version = '';
+    $oSelectedItem->Author = '';
     $oSelectedItem->Description = '';
     $oSelectedItem->Started = 0;
     $oSelectedItem->Enabled = 0;

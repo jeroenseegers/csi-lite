@@ -40,6 +40,8 @@ function get_repository($sUrl, $aRepositories) {
  * @return  array
  */
 function get_category($aInformation, $sType) {
+    $aResults = array();
+
     switch ($sType) {
         case 'applications':
             $sParent    = 'Applications';
@@ -119,8 +121,8 @@ function get_installed_applications() {
     exec("/share/Apps/AppInit/appinit.cgi info", $aInfo);
 
     $sOutput = '';
-    foreach($aInfo as $sItem) {
-        $sItem       = preg_replace('/(\s+)\"?([^\",]+)\"?\s*[=:]\s*(.*)\s*/', '$1"$2":$3', $sItem);
+    foreach($aInfo as $sInfo) {
+        $sItem       = preg_replace('/(\s+)\"?([^\",]+)\"?\s*[=:]\s*(.*)\s*/', '$1"$2":$3', $sInfo);
         $sItem       = preg_replace('/(.*)[=:]\"?([^\",}]+)\"?([^\"]*)/', '$1:"$2"$3', $sItem);
         $sOutput    .= $sItem;
     }
@@ -136,13 +138,15 @@ function get_installed_applications() {
             $bFound  = TRUE;
             $sJson   = json_decode($sSection, true);
 
-            $aItem              = array();
-            $aItem['Name']      = $sJson['name'];
-            $aItem['Version']   = $sJson['version'];
-            $aItem['Enabled']   = $sJson['enabled'];
-            $aItem['Started']   = $sJson['started'];
+            if (!empty($sJson['name'])) {
+                $oItem          = new stdClass();
+                $oItem->Name    = $sJson['name'];
+                $oItem->Version = $sJson['version'];
+                $oItem->Enabled = $sJson['enabled'];
+                $oItem->Started = $sJson['started'];
 
-            $aResults[$aItem['Name']] = $aItem;
+                $aResults[$oItem->Name] = $oItem;
+            }
         }
     }
 
