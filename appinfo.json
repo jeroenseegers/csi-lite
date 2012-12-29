@@ -1,8 +1,9 @@
 {
     enabled="1",
     appinfo_format="1",
-    name="CSI Gaya",
-    version="1.0.1",
+    name="csi-gaya",
+    version="1.1",
+    gayaui_path="#PATH#/gaya",
     webui_path="#PATH#/web",
     daemon_script="fixpermissions.sh"
 }
