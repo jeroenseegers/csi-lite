@@ -39,7 +39,7 @@
                 </td>
             </tr>
         </table>
-        <font size="-2"><i>NMT Community Software Installer for Gaya. CSI Gaya version <?php echo $aSettings['VERSION']; ?>. Created by Ger Teunis &amp; Jeroen Seegers.</i></font>
+        <font size="-2"><i>NMT Community Software Installer for Gaya. CSI Lite version <?php echo $aSettings['VERSION']; ?>. Created by Ger Teunis &amp; Jeroen Seegers.</i></font>
         <?php if ((count($aUpdates) > 0) && ($sScreen != 'Updates')) { ?> <script>alert('Application updates\nare available.\nCheck Updates screen.');</script> <?php } ?>
     </body>
 </html>
