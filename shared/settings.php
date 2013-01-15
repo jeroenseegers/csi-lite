@@ -20,7 +20,6 @@ $aSettings['SESSION_TIMEOUT']    = 5; // Timeout in minutes
 
 $aSettings['DRIVE']              = 'SATA_DISK';
 
-$aSettings['REPOSITORY_URL']     = 'http://78.46.108.209:8100/RepositoryInfo.zip';
 
 /**
  * COMPATIBILITY SETTINGS
@@ -28,7 +27,20 @@ $aSettings['REPOSITORY_URL']     = 'http://78.46.108.209:8100/RepositoryInfo.zip
 if (is_dir('/opt/sybhttpd/localhost.drives/HARD_DISK/')) {
     $aSettings['DRIVE']          = 'HARD_DISK';
 }
+exec('/bin/sh '. $aSettings['MAIN_DIR'] .'/bin/getDeviceType', $aDevice);
+$aSettings['DEVICE_TYPE'] = $aDevice[0];
+switch($aSettings['DEVICE_TYPE']) {
+    case 'A/C-200':
+        $aSettings['REPOSITORY_URL'] = 'http://78.46.108.209:8100/RepositoryInfo_C200.zip';
+    break;
 
-if (is_dir('/nmt/apps/')) {
-    $aSettings['REPOSITORY_URL'] = 'http://78.46.108.209:8100/RepositoryInfo_C200.zip';
+    case 'A-400':
+        $aSettings['REPOSITORY_URL'] = 'http://78.46.108.209:8100/RepositoryInfo_A400.zip';
+    break;
+
+    default:
+        // A/C-300
+        // A-1xx/B-110
+        $aSettings['REPOSITORY_URL']     = 'http://78.46.108.209:8100/RepositoryInfo.zip';
+    break;
 }
