@@ -3,9 +3,9 @@
 error_reporting(E_STRICT | E_ALL);
 ini_set('display_errors', 'On');
 
-include_once 'includes/repository.php';
-include_once 'includes/settings.php';
-include_once 'includes/functions.php';
+include_once '../shared/repository.php';
+include_once '../shared/settings.php';
+include_once '../shared/functions.php';
 
 header('Cache-Control: no-cache, must-revalidate'); // HTTP/1.1
 header('Expires: Thu, 14 Sep 1978 05:00:00 GMT'); // Date in the past

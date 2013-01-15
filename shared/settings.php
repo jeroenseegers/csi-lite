@@ -30,5 +30,5 @@ if (is_dir('/opt/sybhttpd/localhost.drives/HARD_DISK/')) {
 }
 
 if (is_dir('/nmt/apps/')) {
-    $aSettings['REPOSITORY_URL'] = 'http://repository.nmtinstaller.com/RepositoryInfo_C200.xml';
+    $aSettings['REPOSITORY_URL']     = 'http://repository.nmtinstaller.com/RepositoryInfo_C200.xml';
 }
