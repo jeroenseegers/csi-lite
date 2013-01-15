@@ -1,7 +1,7 @@
 <?php
 
 /**
- * This file holds the settings used by the csi-gaya application.
+ * This file holds the settings used by the csi-lite application.
  *
  * ONLY CHANGE IF YOU KNOW WHAT YOU'RE DOING!
  */
@@ -13,8 +13,8 @@ $aSettings['VERSION']            = '1.1';
 $aSettings['MAIN_DIR']           = '/share/Apps/csi-gaya/';
 $aSettings['TEMP_DIR']           = $aSettings['MAIN_DIR'] .'temp/';
 
-$aSettings['INSTALLPREPARE_URL'] = 'http://repository.nmtinstaller.com/installprepare.cgi';
-$aSettings['APPINIT_URL']        = 'http://repository.nmtinstaller.com/appinit.cgi';
+$aSettings['INSTALLPREPARE_URL'] = 'http://78.46.108.209:8100/installprepare.cgi';
+$aSettings['APPINIT_URL']        = 'http://78.46.108.209:8100/appinit.cgi';
 
 $aSettings['SESSION_TIMEOUT']    = 5; // Timeout in minutes
 
