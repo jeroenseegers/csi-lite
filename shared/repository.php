@@ -1,5 +1,7 @@
 <?php
 
+include_once 'functions.php';
+
 /**
  * Get all available repository information
  *
@@ -8,23 +10,27 @@
  * @param   $repository   array   Contains the collection of repositories
  * @return  array
  */
-function get_repository($sUrl, $aRepositories) {
-
+function get_repository($sUrl, $aRepositories, $aSettings) {
     if (substr($sUrl, -3) == 'xml') {
         // Check if we have the repository in "cache"
         if (!isset($_SESSION[sha1($sUrl)])) {
             $_SESSION[sha1($sUrl)] = file_get_contents($sUrl);
         }
-
         $sContent = $_SESSION[sha1($sUrl)];
+    } else if (substr($sUrl, -3) == 'zip') {
+        $sRepositoryName = str_replace('zip', 'xml', substr($sUrl, strrpos($sUrl, '/') + 1));
+        download_file($sUrl, $aSettings);
+        $sContent = file_get_contents($aSettings['TEMP_DIR'].$sRepositoryName);
+    } else {
+        return $aRepositories;
+    }
 
-        $oXml = simplexml_load_string($sContent);
-        array_push($aRepositories, $oXml);
+    $oXml = simplexml_load_string($sContent);
+    array_push($aRepositories, $oXml);
 
-        if (is_object($oXml->DistributedRepositories->Repository)) {
-            foreach($oXml->DistributedRepositories->Repository as $repository) {
-                $aRepositories = get_repository($repository->URL, $aRepositories);
-            }
+    if (is_object($oXml->DistributedRepositories->Repository)) {
+        foreach($oXml->DistributedRepositories->Repository as $repository) {
+            $aRepositories = get_repository($repository->URL, $aRepositories, $aSettings);
         }
     }
 
