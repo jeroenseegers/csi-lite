@@ -83,6 +83,8 @@ function download_file($sUrl, $aSettings, $bClean = FALSE) {
         clean_temp($aSettings);
     }
 
+    exec('chmod -R 777 "'. $aSettings['TEMP_DIR'] .'"');
+
     $rHandle = fopen($sUrl, 'r');
 
     $sFilename = substr($sUrl, strrpos($sUrl, '/') + 1);
@@ -100,8 +102,6 @@ function download_file($sUrl, $aSettings, $bClean = FALSE) {
     if (substr($sFilename, strrpos($sFilename, '.') + 1) == 'zip') {
         unzip($sFilename, $aSettings);
     }
-
-    exec('chmod -R 777 "'. $aSettings['TEMP_DIR'] .'"');
 }
 
 /**
