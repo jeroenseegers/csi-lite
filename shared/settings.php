@@ -8,9 +8,9 @@
 
 date_default_timezone_set('Europe/Amsterdam');
 
-$aSettings['VERSION']            = '1.1';
+$aSettings['VERSION']            = '1.2';
 
-$aSettings['MAIN_DIR']           = '/share/Apps/csi-gaya/';
+$aSettings['MAIN_DIR']           = '/share/Apps/csi-lite/';
 $aSettings['TEMP_DIR']           = $aSettings['MAIN_DIR'] .'temp/';
 
 $aSettings['INSTALLPREPARE_URL'] = 'http://78.46.108.209:8100/installprepare.cgi';
@@ -20,7 +20,7 @@ $aSettings['SESSION_TIMEOUT']    = 5; // Timeout in minutes
 
 $aSettings['DRIVE']              = 'SATA_DISK';
 
-$aSettings['REPOSITORY_URL']     = 'http://repository.nmtinstaller.com/RepositoryInfo.xml';
+$aSettings['REPOSITORY_URL']     = 'http://78.46.108.209:8100/RepositoryInfo.zip';
 
 /**
  * COMPATIBILITY SETTINGS
@@ -30,5 +30,5 @@ if (is_dir('/opt/sybhttpd/localhost.drives/HARD_DISK/')) {
 }
 
 if (is_dir('/nmt/apps/')) {
-    $aSettings['REPOSITORY_URL']     = 'http://repository.nmtinstaller.com/RepositoryInfo_C200.xml';
+    $aSettings['REPOSITORY_URL'] = 'http://78.46.108.209:8100/RepositoryInfo_C200.zip';
 }

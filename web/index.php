@@ -3,9 +3,9 @@
 error_reporting(E_STRICT | E_ALL);
 ini_set('display_errors', 'On');
 
-include_once '../shared/repository.php';
 include_once '../shared/settings.php';
 include_once '../shared/functions.php';
+include_once '../shared/repository.php';
 
 header('Cache-Control: no-cache, must-revalidate'); // HTTP/1.1
 header('Expires: Thu, 14 Sep 1978 05:00:00 GMT'); // Date in the past
@@ -35,7 +35,9 @@ $_SESSION['PrevDate'] = strtotime('now');
 
 // Get repository information
 $aRepository = array();
-$aRepository = get_repository($aSettings['REPOSITORY_URL'], $aRepository, $aSettings);
+$sRepositoryName = str_replace('zip', 'xml', substr($aSettings['REPOSITORY_URL'], strrpos($aSettings['REPOSITORY_URL'], '/') + 1));
+download_file($aSettings['REPOSITORY_URL'], $aSettings, TRUE);
+$aRepository = get_repository($aSettings['TEMP_DIR'].$sRepositoryName, $aRepository, $aSettings);
 
 // Screen switch detected
 if (isset($_POST['toscreen'])) {
