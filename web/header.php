@@ -27,6 +27,7 @@
                     <input type="submit" name="toscreen" value="wait_images">
                     <input type="submit" name="toscreen" value="webservices">
                     <input type="submit" name="toscreen" value="installed">
+                    <input type="submit" name="toscreen" value="settings">
                 </form>
             </td>
         </tr>
