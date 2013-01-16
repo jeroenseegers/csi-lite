@@ -2,6 +2,19 @@
 
 error_reporting(E_STRICT | E_ALL);
 ini_set('display_errors', 'On');
+session_start();
+
+// Change device type
+if (isset($_POST['device'])) {
+    $_SESSION['SET_DEVICE'] = $_POST['device'];
+}
+
+// Reset the current session if $_GET['rc'] parameter is given
+if (isset($_GET['rc']) && $_GET['rc'] == 1) {
+    $sDevice = $_SESSION['SET_DEVICE'];
+    session_unset();
+    $_SESSION['SET_DEVICE'] = $sDevice;
+}
 
 include_once '../shared/settings.php';
 include_once '../shared/functions.php';
@@ -9,12 +22,6 @@ include_once '../shared/repository.php';
 
 header('Cache-Control: no-cache, must-revalidate'); // HTTP/1.1
 header('Expires: Thu, 14 Sep 1978 05:00:00 GMT'); // Date in the past
-session_start();
-
-// Reset the current session if $_GET['rc'] parameter is given
-if (isset($_GET['rc']) && $_GET['rc'] == 1) {
-    session_unset();
-}
 
 #------------------------- SESSION INVALIDATOR -------------------------
 if (isset($_SESSION['PrevDate'])) {
@@ -272,8 +279,12 @@ switch ($sScreen) {
     case 'webservices':
         include 'templates/webservices.php';
         break;
+    case 'settings':
+        include 'templates/settings.php';
+        break;
     default:
         include 'templates/applications.php';
+        break;
 }
 
 include 'footer.php';
