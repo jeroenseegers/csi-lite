@@ -8,7 +8,7 @@
 
 date_default_timezone_set('Europe/Amsterdam');
 
-$aSettings['VERSION']            = '1.2';
+$aSettings['VERSION']            = '1.3';
 
 $aSettings['MAIN_DIR']           = '/share/Apps/csi-lite/';
 $aSettings['TEMP_DIR']           = $aSettings['MAIN_DIR'] .'temp/';
