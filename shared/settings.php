@@ -31,12 +31,12 @@ if (is_dir('/opt/sybhttpd/localhost.drives/HARD_DISK/')) {
 if (isset($_SESSION['SET_DEVICE'])) {
     $aSettings['DEVICE_TYPE'] = $_SESSION['SET_DEVICE'];
 } else {
-    exec('/bin/sh '. $aSettings['MAIN_DIR'] .'/bin/getDeviceType', $aDevice);
-    $aSettings['DEVICE_TYPE'] = $aDevice[0];
+    $aSettings['DEVICE_TYPE'] = trim(file_get_contents($aSettings['MAIN_DIR'] .'/device'));
 }
 
 switch($aSettings['DEVICE_TYPE']) {
     case 'A/C-200':
+    case 'A/C-300':
         $aSettings['REPOSITORY_URL'] = 'http://78.46.108.209:8100/RepositoryInfo_C200.zip';
     break;
 
@@ -45,7 +45,6 @@ switch($aSettings['DEVICE_TYPE']) {
     break;
 
     default:
-        // A/C-300
         // A-1xx/B-110
         $aSettings['REPOSITORY_URL']     = 'http://78.46.108.209:8100/RepositoryInfo.zip';
     break;

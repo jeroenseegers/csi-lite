@@ -1,14 +1,13 @@
 #!/bin/sh
 if [ -e "/nmt/apps" ]; then
-    configid=$(genxenv2 g /tmp/lrro.xenv lrro.configid 2>/dev/null | grep -e " lrro.configid" | sed -e's/.*lrro.configid\s*//' | sed 's/\ //g'| sed 's/0x//g')
-    configid=$configid[@]:0:4
+    configid=$(genxenv2 g /tmp/lrro.xenv lrro.configid 2>/dev/null | sed -n 's/^.*0x\([0-9]\{4\}\).*$/\1/p');
     if [ "$configid" = "8911" ]; then
-        echo "A-400"
+        echo "A-400";
     elif [ "$configid" = "8647" ]; then
-        echo "A/C-300"
+        echo "A/C-300";
     else
-        echo "A/C-200"
+        echo "A/C-200";
     fi
 else
-    echo "A-1xx/B-110"
+    echo "A-1xx/B-110";
 fi
