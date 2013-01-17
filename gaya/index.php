@@ -46,6 +46,8 @@ $sRepositoryName = str_replace('zip', 'xml', substr($aSettings['REPOSITORY_URL']
 download_file($aSettings['REPOSITORY_URL'], $aSettings, TRUE);
 $aRepository = get_repository($aSettings['TEMP_DIR'].$sRepositoryName, $aRepository, $aSettings);
 
+$aList = array();
+
 // Screen switch detected
 if (isset($_POST['toscreen'])) {
     $_SESSION['screen'] = $_POST['toscreen'];
