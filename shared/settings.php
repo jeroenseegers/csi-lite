@@ -31,8 +31,7 @@ if (is_dir('/opt/sybhttpd/localhost.drives/HARD_DISK/')) {
 if (isset($_SESSION['SET_DEVICE'])) {
     $aSettings['DEVICE_TYPE'] = $_SESSION['SET_DEVICE'];
 } else {
-    exec('/bin/sh '. $aSettings['MAIN_DIR'] .'/bin/getDeviceType', $aDevice);
-    $aSettings['DEVICE_TYPE'] = $aDevice[0];
+    $aSettings['DEVICE_TYPE'] = file_get_contents($aSettings['MAIN_DIR'] .'/device');
 }
 
 switch($aSettings['DEVICE_TYPE']) {
