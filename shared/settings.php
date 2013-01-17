@@ -37,6 +37,7 @@ if (isset($_SESSION['SET_DEVICE'])) {
 
 switch($aSettings['DEVICE_TYPE']) {
     case 'A/C-200':
+    case 'A/C-300':
         $aSettings['REPOSITORY_URL'] = 'http://78.46.108.209:8100/RepositoryInfo_C200.zip';
     break;
 
@@ -45,7 +46,6 @@ switch($aSettings['DEVICE_TYPE']) {
     break;
 
     default:
-        // A/C-300
         // A-1xx/B-110
         $aSettings['REPOSITORY_URL']     = 'http://78.46.108.209:8100/RepositoryInfo.zip';
     break;
