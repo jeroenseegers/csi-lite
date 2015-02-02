@@ -1,3 +1,11 @@
+This project is no longer being developed
+-----------------------------------------
+I do not own a NMT device anymore and as such, this project is not being developed anymore.
+**No more updates will be released**
+
+--
+
+  
 Community Software Installer Lite
 -------------------------------------------
 
@@ -7,7 +15,7 @@ This repository contains the CSI application which runs on your NMT device and g
 
 ------------
 
-The easiest way to get started is to install CSI Lite through the CSI Desktop application made by jhmiller and Ger Teunis (available here). From there, select the csi-lite application from the applications tab and install.
+The easiest way to get started is to install CSI Lite through the CSI Desktop application made by jhmiller and Ger Teunis. From there, select the csi-lite application from the applications tab and install.
 
 After installation is complete you can access the CSI Lite interface from your browser, and natively from your NMT.
 
